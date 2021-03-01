@@ -28,20 +28,23 @@ def sort_by_TEMP(station_data):
     return station_data[1]
 
 
-target_data = list(filter(lambda item: item['TEMP'] != '-99.000' or item['TEMP'] != '-999.000', data))
+target_data = list(filter(lambda item: item['TEMP'] != '-99.000' and item['TEMP'] != '-999.000', data))
 target_data = list(filter(lambda item: True if item['station_id'] in ['C0A880', 'C0F9A0', 'C0G640', 'C0R190', 'C0X260'] else False, target_data))
 
 result = []
 
 for stations in ['C0A880', 'C0F9A0', 'C0G640', 'C0R190', 'C0X260']:
     station_data = list(filter(lambda station: station['station_id'] == stations, target_data))
-    temp_list = [(station['station_id'], float( "{:.1f}".format( float(station['TEMP']) ) ) ) for station in station_data]
-    # float("{:.1f}".format(float(station['TEMP']))) converts data from string format to float format with 1 decimal space
-    max_temp = list(max(temp_list))
-    if max_temp[1] == -99.0 or max_temp[1] == -999.0:
-        max_temp[1] = 'None'
-    result.append(max_temp)
-# filtering for the requested stations
+    if station_data == []:
+        result.append([stations,'None'])
+    else:
+        temp_list = [(station['station_id'], float( "{:.1f}".format( float(station['TEMP']) ) ) ) for station in station_data]
+        # float("{:.1f}".format(float(station['TEMP']))) converts data from string format to float format with 1 decimal space
+        max_temp = list(max(temp_list))
+        if max_temp[1] == -99.0 or max_temp[1] == -999.0:
+            max_temp[1] = 'None'
+        result.append(max_temp)
+    # filtering for the requested stations
 
 # result.sort(key=sort_by_TEMP)
 # The above line can be used to sort the result by tempurature from lowest to highest
